@@ -12,13 +12,15 @@ public class Tweet {
     private static com.codepath.apps.restclienttemplate.TimeFormatter TimeFormatter;
     public String body;
     public String createdAt;
+    public long id;
     public User user;
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.body = jsonObject.getString("text"); //changing the json object into a java tweet object
         tweet.createdAt = jsonObject.getString("created_at");
-        tweet.user = User.fromJson(jsonObject.getJSONObject("user")); //should be a java User model, fromJson will take in a json object and it will return a use model
+        tweet.id = jsonObject.getLong("id");
+        tweet.user = User.fromJson(jsonObject.getJSONObject("user")); //should be a java user model, fromJson will take in a json object and it will return a usee model
         return tweet;
     }
 
