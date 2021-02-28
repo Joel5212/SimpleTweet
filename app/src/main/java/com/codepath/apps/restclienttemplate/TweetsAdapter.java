@@ -43,7 +43,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             //Get the data at position
             Tweet tweet = tweets.get(position);
             //Bind the tweet with the view holder
+
             holder.bind(tweet);
+
         }
 
         public int getItemCount()
@@ -66,6 +68,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivProfileImage;
         TextView tvBody;
         TextView tvScreenName;
+        TextView tvTimestamp;
 
         public ViewHolder(@NonNull View itemView)  //item view is one row in the recycler view(tweet)
         {
@@ -73,13 +76,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+
 
         }
 
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.screenName);
+            tvTimestamp.setText(tweet.getFormattedTimeStamp(tweet.createdAt));
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
+
         }
     }
 
