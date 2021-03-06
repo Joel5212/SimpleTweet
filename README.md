@@ -31,7 +31,6 @@ The following **additional** features are implemented:
 
 
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
