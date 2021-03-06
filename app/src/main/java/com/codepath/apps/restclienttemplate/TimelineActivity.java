@@ -1,18 +1,23 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.os.Bundle;
-import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,10 @@ import static com.codepath.apps.restclienttemplate.models.Tweet.fromJsonArray;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String TAG = "TimelineActivity ";
+
+    // REQUEST_CODE can be any value we like, used to determine the result type later
+    private final int REQUEST_CODE = 20;
+
     TwitterClient client;//we will use this instance in multiple methods
     RecyclerView rvTweets;
     List<Tweet> tweets;
@@ -34,7 +43,10 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
         client = TwitterApp.getRestClient(this);
+
+
 
 
         swipeContainer = findViewById(R.id.swipeContainer);
@@ -68,12 +80,47 @@ public class TimelineActivity extends AppCompatActivity {
         //Adds the scroll listener to RecyclerView
         rvTweets.addOnScrollListener(scrollListener);
         populateHomeTimeline();
+        //calling a twitter API by using the twitter client
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);  //inflating the menu
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.compose)
+        {
+            //Compose icon has been selected
+            //Navigate to the compose activity
 
+            Intent intent = new Intent(this, ComposeActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);   //launches the child activity and the child activity gives us back a tweet if the user inputted it
 
-        populateHomeTimeline();                      //calling a twitter API by using the twitter client
+            return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            //Get data from the intent (tweet)
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet")); //result of whatever the user published
+            // update the RecyclerView with this new tweet
+            // Modify data source of tweets
+            tweets.add(0, tweet);
+            // Update the adapter
+            adapter.notifyItemInserted(0);
+            rvTweets.smoothScrollToPosition(0);
+        }
+        super.onActivityResult(requestCode, resultCode, data); //Request code is the same as what we launches the activity with, the result code is something defined by android to make sure the child activity has finished successfully, data is the data that child activity has communicated back to us
 
     }
 
