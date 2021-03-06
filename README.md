@@ -29,11 +29,7 @@ The following **additional** features are implemented:
 
 - [ ] List anything else that you can get done to improve the app functionality!
 
-## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
-
-<img src='https://github.com/Joel5212/SimpleTweet/blob/master/SimpleTweet2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
